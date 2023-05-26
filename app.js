@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 
 const app = express();
 
-app.use(bodyParser())
+app.use(bodyParser.json())
 
 const authRoutes = require("./routes/auth");
 const blogRoutes = require('./routes/blog')
