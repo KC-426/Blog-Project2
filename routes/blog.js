@@ -10,7 +10,7 @@ router.post('/create', upload.single('file'), blogController.createBlog)
 
 router.get('/retrieve', blogController.retrieveBlog)
 
-router.put('/updated', blogController.updateBlog)
+router.get('/updated', blogController.updateBlog)
 
 router.get('/delete', blogController.deleteBlog)
 

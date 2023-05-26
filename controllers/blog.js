@@ -67,29 +67,46 @@ exports.retrieveBlog = (req, res, next) => {
     });
 }; 
 
+
 exports.updateBlog = (req, res, next) => {
-  const blogId = req.params.blogId
+  const blogId = req.params.blogId;
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    const error = new Error('Validation failed, entered data is incorrect.');
+    const error = new Error("Validation failed, entered data is incorrect.");
     error.statusCode = 422;
     throw error;
   }
-  const author = req.body.author;
+   const author = req.body.author;
   const description = req.body.description;
-  const image = req.file;
   const blg = req.body.blog;
-
+  let image = req.body.image;
+  if (req.file) {
+    image = req.file.path;
+  }
+  if (!image) {
+    const error = new Error("No image picked.");
+    error.statusCode = 422;
+    throw error;
+  }
   Blog.findById(blogId)
     .then((blog) => {
-      blog.author = author;
+      if (!blog) {
+        const error = new Error("Could not find blog.");
+        error.statusCode = 404;
+        throw error;
+      }
+    
+      if (image !== blog.image) {
+        clearImage(blog.imageUrl);
+      }
+      blog.author = author 
       blog.description = description;
       blog.image = image;
       blog.blog = blg;
       return blog.save();
     })
-    .then(blog => {
-      res.status(201).json({ message: "UPDATED SUCCESSFULLY", blog: blog });
+    .then((result) => {
+      res.status(200).json({ message: "blog updated!", blog: result });
     })
     .catch((err) => {
       if (!err.statusCode) {
