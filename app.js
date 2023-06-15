@@ -12,6 +12,9 @@ const blogRoutes = require('./routes/blog')
 
 console.log('-------------server started------------------------')
 
+console.log('-------------server started------------------------')
+
+
 app.use('/auth', authRoutes);
 app.use('/blog', blogRoutes)
 
